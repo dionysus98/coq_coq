@@ -278,3 +278,38 @@ Module NatPlay2.
     Proof. simpl. reflexivity. Qed.
         
 End NatPlay2.
+
+(*?  Proof by Simplification  *)
+
+(* A general property of natural numbers *)
+
+Theorem plus_O_n : 
+    forall n : nat, O + n = n.
+Proof.
+    intros n. simpl. reflexivity. Qed.
+
+Theorem plus_1_n : 
+    forall n : nat, 1 + n = S n.
+Proof.
+    intros n. reflexivity. Qed.
+
+(*?  Proof by Rewriting  *)
+
+Theorem plud_id_example:
+    forall n m : nat,
+        n = m -> (* Logical implication *)
+        n + m = m + n.
+Proof.
+    intros n m. (* move quantifiers into ctx *)
+    intros H. (* move Hypothesis into ctx *)
+    rewrite -> H. (* rewrite goal using H either left <- or right -> ; Here we rewite the contents of left *)
+    reflexivity. Qed.
+
+Theorem mult_n_0_m_0:
+    forall n m : nat,
+        n * 0 + m * 0 = 0.
+Proof.
+    intros n m.
+    rewrite <- mult_n_O.
+    rewrite <- mult_n_O.
+    reflexivity. Qed.
