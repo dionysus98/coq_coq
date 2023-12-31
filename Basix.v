@@ -279,6 +279,10 @@ Module NatPlay2.
         
 End NatPlay2.
 
+Notation "x =? y" := (NatPlay2.eqb x y) (at level 70) : nat_scope.
+Notation "x <=? y" := (NatPlay2.leqb x y) (at level 70) : nat_scope.
+
+
 (*?  Proof by Simplification  *)
 
 (* A general property of natural numbers *)
@@ -313,3 +317,127 @@ Proof.
     rewrite <- mult_n_O.
     rewrite <- mult_n_O.
     reflexivity. Qed.
+
+(*? Proof by Case Analysis  *)
+
+Theorem plus_1_neq_0_firsttry: 
+    forall n : nat,
+        ((n + 1) =? 0) = false.
+Proof.
+    intros n.
+    simpl.
+    Abort. (*Wont work. so abort*)
+
+Theorem plus_1_neq_0_secondtry: 
+    forall n : nat,
+        ((n + 1) =? 0) = false.
+Proof.
+    intros n.
+    destruct n as [ | n'] eqn:E.
+    (* destruct n => [O | S n'] => [ | n'] *)
+    - reflexivity.
+    - reflexivity.
+    Qed.
+
+Theorem plus_1_neq_0: 
+    forall n : nat,
+        ((n + 1) =? 0) = false.
+Proof.
+    intros [ | n'].
+    - reflexivity.
+    - reflexivity.
+    Qed.
+
+Theorem negb_involutive:
+    forall b : B,
+        negb (negb b) = b.
+Proof.
+    intros b. destruct b eqn:E.
+    - reflexivity.
+    - reflexivity.
+    Qed.
+
+Theorem andb_commutative:
+    forall b c : B,
+        andb b c = andb c b.
+Proof.
+    intros b c.
+    destruct b eqn:Eb.
+    - destruct c eqn:Ec.
+        + reflexivity.
+        + reflexivity.
+    -  destruct c eqn:Ec.
+        + reflexivity.
+        + reflexivity.    
+    Qed.
+
+Theorem andb_commutative':
+    forall b c : B,
+        andb b c = andb c b.
+Proof.
+    intros b c.
+    destruct b eqn:Eb.
+    { destruct c eqn:Ec.
+         { reflexivity. }
+         { reflexivity. } }
+    { destruct c eqn:Ec.
+         { reflexivity. }
+         { reflexivity. } }
+    Qed.
+
+Theorem andb_commutative'':
+    forall b c : B,
+        andb b c = andb c b.
+Proof.
+    intros [] [].
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.      
+    Qed.
+
+(*? COQ syntax 
+    - Vernacular: Checkm Theorem, Proof, Qed..
+    - Gallina: The func prog lang or logic..
+    - Ltac: Language for tactics. intros, simpl, destruct.. 
+ *)
+
+(*? Lambda Calculus
+    e ::= x | λx. e | e1 e2
+    - Alpha equivalence: names don't matter
+    - Beta reduction: application and substitution
+        + call-by-value[cbv]: red app after redcing arg to val
+        + call-by-name[cbn]: red before after redcing arg to val
+        + Full: reduce any application any time any where
+ *)
+
+(*? Reduction tactics 
+    - [simpl]: `human readable` smart choices about reductions
+    - [cbn]: modern, even smarter than [simpl]?
+    - [cbv]: fully compute
+
+    - [reflexivity]
+        + finsihes proof 'by reflexivity of equality'
+        + To prove [a = b], fully reduce [a] & [b]
+            -- if alpha-equivalent then succeed
+            -- else fail
+ *)
+
+(*? Gallina
+    - Definition (delta reduction)
+    - Inductive types, pattern matching, recursion (iota reduction)
+    - let bindings (zeta reduction)
+
+    - [cbv] takes flags to selectively enable each kind of reduction
+    - [compute] is shorthand for [beta delta iota zeta]    
+ *)
+
+(*? Convertibilty
+    - [e1] & [e2] are definitionally equal aka convertible
+        if they fully reduce to α-equivalent terms.
+        + That's what the [=] means.
+
+    - Converitibilty is decidable in COQ: 
+        + Gallina is strongly normalizing.
+        + That's what the [reflexivity] do    
+ *)
