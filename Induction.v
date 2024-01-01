@@ -5,7 +5,7 @@
     $ coq_makefile -f _CoqProject -o Makefile *.v
 
     # without MakeFile
-    $ coqc -Q . LF Basics.v
+    $ coqc -Q . FOUNDATIONS Basix.v
  *)
 
 From FOUNDATIONS Require Export Basix.
