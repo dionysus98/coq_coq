@@ -1,3 +1,7 @@
 /notes/
 /textbook/
 *.v#
+*.d
+*.vo*
+*.aux
+*.glob
