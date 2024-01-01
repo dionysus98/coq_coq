@@ -5,3 +5,4 @@
 *.vo*
 *.aux
 *.glob
+Makefile*
