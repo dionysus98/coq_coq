@@ -83,3 +83,51 @@ Proof.
     - simpl. rewrite add_0_r. reflexivity.    
     - simpl. rewrite IHn'. rewrite plus_a_Sb. reflexivity.
     Qed.
+
+(* Proofs within Proofs  
+    - Use the [assert] tactic.
+ *)
+
+Theorem mult_0_plus':
+    forall n m: nat,
+        (n + 0 + 0) * m = n * m.
+Proof.
+    intros n m.
+    assert (H: n + 0 + 0 = n).
+    - rewrite add_comm. simpl. rewrite add_comm. reflexivity.
+    - rewrite H. reflexivity.
+    Qed.
+
+Theorem plus_rearrange_firsttry:
+    forall n m p q: nat,
+        (n + m) + (p + q) = (m + n) + (q + p).
+Proof.
+    intros n m p q.
+    Set Printing Parentheses.
+    rewrite add_comm.
+    Abort.
+
+Theorem plus_rearrange_firsttry:
+    forall n m p q: nat,
+        (n + m) + (p + q) = (m + n) + (p + q).
+Proof.
+    intros n m p q.
+    assert (H: n + m = m + n).
+    - rewrite add_comm. reflexivity.
+    - rewrite H. reflexivity.
+    Qed.
+
+(*? Formal vs. Informal proof  
+    - Formal proofs are code.
+    - Informal proof are algorithms
+*)
+
+Theorem add_assoc':
+    forall n m p: nat,
+        n + (m + p) = (n + m) + p.
+Proof.
+    intros n m p.
+    induction n as [ | n' IHn'].
+    - reflexivity.
+    - simpl. rewrite IHn'. reflexivity.
+    Qed.
