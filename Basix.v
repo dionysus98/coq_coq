@@ -28,7 +28,7 @@ Definition next_weekday (d:day) : day :=
 Example test_next_weekday:
     (next_weekday (next_weekday monday)) = wednesday.
 
-Proof. simpl. 
+Proof. simpl.
        reflexivity. (* Basically checks equality? *)
 Qed.
 
@@ -105,7 +105,7 @@ Proof. simpl. reflexivity. Qed.
 Definition nandb (b1 b2 :B) : B :=
   match b1, b2 with
     | false, _ => true
-    | _, false => true    
+    | _, false => true
     | _, _ => false
   end.
   (* negb (andb b1 b2). *)
@@ -210,7 +210,7 @@ Module NatPlay2.
 
     (* Compute (plus 3 2). *)
     (* ===> 5 : nat *)
-    
+
     (*      [plus 3 2]
        i.e. [plus (S (S (S O))) (S (S O))]
         ==> [S (plus (S (S O)) (S (S O)))]
@@ -221,7 +221,7 @@ Module NatPlay2.
               by the second clause of the [match]
         ==> [S (S (S (S (S O))))]
               by the first clause of the [match]
-       i.e. [5]  *)    
+       i.e. [5]  *)
 
     Fixpoint mult (n m : nat) : nat :=
         match n with
@@ -233,7 +233,7 @@ Module NatPlay2.
     (* Compute (mult 3 2). *)
     (* [mult 3 2]  *)
     (* i.e [mult (S (S (S O))) (S (S O))] *)
-    (* => [plus (S (S O)) (mult (S (S O)) (S (S O)))] 
+    (* => [plus (S (S O)) (mult (S (S O)) (S (S O)))]
             ..... *)
 
     Example test_mult: mult 3 3 = 9.
@@ -245,7 +245,7 @@ Module NatPlay2.
         | _, O => n
         | S n', S m' => minus n' m'
         end.
-    
+
     Example test_minus: minus 8 5 = 3.
     Proof. simpl. reflexivity. Qed.
 
@@ -263,7 +263,7 @@ Module NatPlay2.
 
     Example test_is_equal: eqb 5 5 = true.
     Proof. simpl. reflexivity. Qed.
-    
+
     Example test_isnot_equal: eqb 5 6 = false.
     Proof. simpl. reflexivity. Qed.
 
@@ -276,7 +276,7 @@ Module NatPlay2.
 
     Example test_less_than: leqb 8 8 = true.
     Proof. simpl. reflexivity. Qed.
-        
+
 End NatPlay2.
 
 Notation "x =? y" := (NatPlay2.eqb x y) (at level 70) : nat_scope.
@@ -287,12 +287,12 @@ Notation "x <=? y" := (NatPlay2.leqb x y) (at level 70) : nat_scope.
 
 (* A general property of natural numbers *)
 
-Theorem plus_O_n : 
+Theorem plus_O_n :
     forall n : nat, O + n = n.
 Proof.
     intros n. simpl. reflexivity. Qed.
 
-Theorem plus_1_n : 
+Theorem plus_1_n :
     forall n : nat, 1 + n = S n.
 Proof.
     intros n. reflexivity. Qed.
@@ -320,7 +320,7 @@ Proof.
 
 (*? Proof by Case Analysis  *)
 
-Theorem plus_1_neq_0_firsttry: 
+Theorem plus_1_neq_0_firsttry:
     forall n : nat,
         ((n + 1) =? 0) = false.
 Proof.
@@ -328,7 +328,7 @@ Proof.
     simpl.
     Abort. (*Wont work. so abort*)
 
-Theorem plus_1_neq_0_secondtry: 
+Theorem plus_1_neq_0_secondtry:
     forall n : nat,
         ((n + 1) =? 0) = false.
 Proof.
@@ -339,7 +339,7 @@ Proof.
     - reflexivity.
     Qed.
 
-Theorem plus_1_neq_0: 
+Theorem plus_1_neq_0:
     forall n : nat,
         ((n + 1) =? 0) = false.
 Proof.
@@ -368,7 +368,7 @@ Proof.
         + reflexivity.
     -  destruct c eqn:Ec.
         + reflexivity.
-        + reflexivity.    
+        + reflexivity.
     Qed.
 
 Theorem andb_commutative':
@@ -393,13 +393,13 @@ Proof.
     - reflexivity.
     - reflexivity.
     - reflexivity.
-    - reflexivity.      
+    - reflexivity.
     Qed.
 
-(*? COQ syntax 
+(*? COQ syntax
     - Vernacular: Checkm Theorem, Proof, Qed..
     - Gallina: The func prog lang or logic..
-    - Ltac: Language for tactics. intros, simpl, destruct.. 
+    - Ltac: Language for tactics. intros, simpl, destruct..
  *)
 
 (*? Lambda Calculus
@@ -411,7 +411,7 @@ Proof.
         + Full: reduce any application any time any where
  *)
 
-(*? Reduction tactics 
+(*? Reduction tactics
     - [simpl]: `human readable` smart choices about reductions
     - [cbn]: modern, even smarter than [simpl]?
     - [cbv]: fully compute
@@ -429,7 +429,7 @@ Proof.
     - let bindings (zeta reduction)
 
     - [cbv] takes flags to selectively enable each kind of reduction
-    - [compute] is shorthand for [beta delta iota zeta]    
+    - [compute] is shorthand for [beta delta iota zeta]
  *)
 
 (*? Convertibilty
@@ -437,7 +437,7 @@ Proof.
         if they fully reduce to α-equivalent terms.
         + That's what the [=] means.
 
-    - Converitibilty is decidable in COQ: 
+    - Converitibilty is decidable in COQ:
         + Gallina is strongly normalizing.
-        + That's what the [reflexivity] do    
+        + That's what the [reflexivity] do
  *)

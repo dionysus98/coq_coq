@@ -77,3 +77,52 @@ Notation "[ x ; .. ; y ]" := (cons x .. (cons y nil) ..).
 Definition mine1 :=  1 :: ( 2 :: ( 3 :: nil)).
 Definition mine2 :=  1 ::  2 ::  3 :: nil.
 Definition mine3 :=  [1; 2; 3].
+
+(* list functions *)
+
+Fixpoint repeat (n count : nat) : natlist :=
+    match count with
+    | O => nil
+    | S count' => n :: (repeat n count')
+    end.
+
+(* Compute repeat 42 3. *)
+
+Fixpoint length (xs: natlist) : nat :=
+    match xs with
+    | [] => O
+    | _ :: t => S (length t)
+    end.
+
+(* Compute S (S (S O)). *)
+(* Compute length [2;2;2;2]. *)
+
+Fixpoint concat (xs ys: natlist) : natlist :=
+    match xs with
+    | [] => ys
+    | h :: t => h :: (concat t ys)
+    end.
+
+(* Compute concat [3;2;1] [4;5;6]. *)
+
+Notation "x ++ y" := 
+    (concat x y)
+    (right associativity, at level 60).
+
+(* Compute [1;4;8] ++ [9;5]. *)
+
+Example test_1:
+     [1; 4; 8] ++ [9; 5] = [1; 4; 8; 9; 5].
+Proof. simpl. reflexivity. Qed.
+
+Definition hd' (default: nat) (l: natlist) : nat :=
+    match l with
+    | [] => default
+    | h :: _ => h
+    end.
+
+Definition hd (l: natlist) : option nat  :=
+    match l with
+    | [] => None
+    | h :: _ => Some(h)
+    end.
