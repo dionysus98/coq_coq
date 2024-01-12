@@ -166,9 +166,9 @@ Proof.
     intros xs.
     induction xs as [ | h t].
     - reflexivity.
-    - simpl. 
-      rewrite app_length. 
-      rewrite IHt. 
-      rewrite add_comm. 
-      reflexivity.    
+    - simpl.
+      rewrite app_length.
+      rewrite IHt.
+      rewrite add_comm.
+      reflexivity.
     Qed.
