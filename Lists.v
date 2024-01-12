@@ -126,3 +126,49 @@ Definition hd (l: natlist) : option nat  :=
     | [] => None
     | h :: _ => Some(h)
     end.
+
+(* induction over lists *)
+Fixpoint rev (xs : natlist) : natlist :=
+    match xs with
+    | [] => []
+    | h :: t => rev t ++ [h]
+    end.
+
+Example rev1: rev [1; 2; 3] = [3; 2 ; 1].
+Proof. reflexivity. Qed.
+
+(* Prove the length of rev list:xs id the same as the list:xs *)
+Theorem rev_length:
+    forall xs : natlist,
+        length (rev xs) = length xs.
+Proof. 
+    intros xs.
+    induction xs as [ | h t].
+    - reflexivity.
+    - simpl. rewrite <- IHt. 
+    (* Set Printing All. *)
+    Abort.
+
+Theorem app_length:
+    forall (xs ys : natlist),
+        length (xs ++ ys) = length xs + length ys.
+Proof.
+    intros xs ys.
+    induction xs as [ | xh xt].
+    - reflexivity.
+    - simpl. rewrite <- IHxt. reflexivity.
+    Qed.
+
+Theorem rev_length:
+    forall xs : natlist,
+        length (rev xs) = length xs.
+Proof. 
+    intros xs.
+    induction xs as [ | h t].
+    - reflexivity.
+    - simpl. 
+      rewrite app_length. 
+      rewrite IHt. 
+      rewrite add_comm. 
+      reflexivity.    
+    Qed.
