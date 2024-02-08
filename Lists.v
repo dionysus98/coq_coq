@@ -172,3 +172,18 @@ Proof.
       rewrite add_comm.
       reflexivity.
     Qed.
+
+(* options *)
+Fixpoint nth_bad (xs : natlist) (n:nat) : nat :=
+    match xs with
+    | [] => 42
+    | h :: t =>
+        match n with
+        | 0 => h
+        | S n' => nth_bad t n'
+        end
+    end.
+
+Inductive natotion : Type :=
+    | Some (n : nat)
+    | None.
