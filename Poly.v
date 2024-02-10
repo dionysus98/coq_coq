@@ -49,3 +49,68 @@ Fixpoint repeat' X x count : list X :=
     | O => nil X
     | S count' => cons X x (repeat' X x count')
     end.
+
+(* Implicit Arguments *)
+Arguments nil {X}.
+Arguments cons {X}.
+(* Arguments repeat' {X}. *)
+
+Definition list123 := 
+    cons 0 (cons 2 nil).
+
+Check list123.
+
+Fixpoint repeat'' {X: Type} (x: X) (count: nat) : list X :=
+    match count with
+    | O => nil
+    | S count' => cons x (repeat'' x count')
+    end.
+
+Fixpoint app {X: Type} (l1 l2 : list X) : list X :=
+    match l1 with
+    | nil => l2
+    | cons h t => cons h (app t l2)
+    end.
+
+Compute app (cons 1 (cons 2 nil)) 
+            (cons 3 (cons 4 nil)).
+
+Fixpoint rev {X: Type} (xs : list X) : list X :=
+    match xs with
+    | nil => nil
+    | cons h t =>  app (rev t) (cons h nil) 
+    end.
+
+Compute rev (cons 1 (cons 2 (cons 3 nil))).
+
+
+Fixpoint lengt {X: Type} (xs : list X) : nat :=
+    match xs with
+    | nil => O
+    | cons _ t => S (lengt t)
+    end.
+
+Compute lengt (cons 1 (cons 2 (cons 3 nil))).
+
+Example test_rev1:
+      rev (cons 1 (cons 2 nil)) = (cons 2 (cons 1 nil)).
+Proof. simpl. reflexivity. Qed.
+
+Example test_lengt1:
+    lengt (cons true (cons false (cons true nil))) = 3.
+Proof. simpl. reflexivity. Qed.
+
+Fail Definition mynil := nil.
+Definition mynil: list nat := nil.
+
+(* we can force the implicit arguments to be explicit by prefixing the function name with @. *)
+Check @nil : forall X: Type, list X.
+
+Definition mynil' := @nil nat.
+Check mynil'.
+
+Notation "x :: y" := (cons x y) (at level 60, right associativity).
+Notation "[ ]" := nil.
+Notation "[ x ; .. ; y ]" := (cons x .. (cons y []) ..).
+Notation "x ++ y" := (app x y) (at level 60, right associativity).
+
