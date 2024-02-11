@@ -1,0 +1,39 @@
+{
+	"Create a definition":  {
+		"prefix" : "def",
+		"body": [
+			"Definition ${1:name}' $2: $3 :=",
+			"$0",
+			"."],
+		"description": "Creates a definition."
+		
+	},
+	"Create a Fixpoint definition":  {
+		"prefix" : "deffix",
+		"body": [
+			"Fixpoint ${1:name}' $2: $3 :=",
+			"$0",
+			"."],
+		"description": "Creates a recursive definition."
+		
+	},
+	"Create a Match definition":  {
+		"prefix" : "match",
+		"body": [
+			"match $1 with",
+    		"| $2 => $0",    		
+    		"end"
+		],
+		"description": "Match Non Exahustive Patterns"		
+	},
+	"Create an Inductive definition":  {
+		"prefix" : "induct",
+		"body": [
+			"Inductive ${1:name} ($3: Type) : Type :="
+            "| $0",
+            ".",
+            "Arguments $0 {$3}."
+		],
+		"description": "Defines an Inductive Type"		
+	},
+}

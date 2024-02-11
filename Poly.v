@@ -114,3 +114,121 @@ Notation "[ ]" := nil.
 Notation "[ x ; .. ; y ]" := (cons x .. (cons y []) ..).
 Notation "x ++ y" := (app x y) (at level 60, right associativity).
 
+Definition list123''' := [1; 2; 3].
+Check list123'''.
+
+Theorem app_nil_r:
+    forall X (l:list X),
+        l ++ [] = l.
+Proof.
+  intros X l.
+  induction l.
+  + simpl. reflexivity.
+  + simpl. rewrite IHl. reflexivity.
+  Qed.
+
+Theorem app_assoc: 
+    forall A (l m n: list A),
+        l ++ m ++ n = (l ++ m) ++ n.
+Proof.
+  intros A l m n.
+  induction l.
+  + simpl. reflexivity.
+  + simpl. rewrite IHl. simpl. reflexivity.
+  Qed.
+
+Lemma app_length:
+    forall X (l1 l2 : list X),
+        lengt (l1 ++ l2) = lengt l1 + lengt l2.
+Proof.
+  intros X l1 l2.
+  induction l1.
+  + simpl. reflexivity.
+  + simpl. rewrite IHl1. simpl. reflexivity.
+  Qed.
+
+(* Polymorphic Pairs
+   - often called products.*)
+Inductive prod (X Y: Type) : Type :=
+    | pair (x: X) (y: Y).
+
+(* we make the type arguments implicit and define the familiar concrete notation. *)
+Arguments pair {X} {Y}.
+Notation "( x , y )" := (pair x y).
+Notation "X * Y" := (prod X Y) : type_scope.
+(* The annotation : type_scope tells Coq that this abbreviation should only be used when parsing types, not when parsing expressions. This avoids a clash with the multiplication symbol. *)
+
+Definition fst {X Y : Type} (p: X * Y) : X :=
+    match p with
+    | (X, Y) => X
+    end.
+
+Definition snd {X Y : Type} (p : X * Y) : Y :=
+  match p with
+  | (x, y) => y
+  end.
+
+Fixpoint combine {X Y: Type} (xs: list X) (ys: list Y) : list (X * Y) :=
+    match xs, ys with    
+    | _, nil => nil
+    | nil, _ => nil
+    | cons xh xt, cons yh yt => 
+        cons (pair xh yh) (combine xt yt)
+    end.
+
+Compute (combine [1;2] [false; true]).
+Check combine.
+Check @combine.
+
+Fixpoint split {X Y : Type} (l : list (X * Y)) : (list X) * (list Y) :=
+    match l with
+    | [] => (pair [] [])
+    | (pair x y) :: t  => (pair (x :: (fst (split t)))
+                                (y :: (snd (split t))))
+    end.
+
+Example test_split:
+  split [(1, false); (2, false)] = ([1; 2], [false; false]).
+Proof. simpl. reflexivity. Qed.
+
+(* Poly Options *)
+
+Module OptPlay.
+
+Inductive option (X: Type) : Type :=
+    | Some (x: X)
+    | None.
+
+Arguments Some {X}.
+Arguments None {X}.
+
+Fixpoint nth_error {X:Type} (xs: list X) (n: nat): option X :=
+    match n, xs  with
+    | _, []  => None
+    | O, x :: _  => Some x
+    | S n', _ :: xs' => nth_error xs' n'
+    end.
+
+Example test_nth_error1 : nth_error [4;5;6;7] 0 = Some 4.
+Proof. simpl. reflexivity. Qed.
+
+Example test_nth_error2 : nth_error [[1];[2]] 1 = Some [2].
+Proof. simpl. reflexivity. Qed.
+
+Example test_nth_error3 : nth_error [true] 2 = None.
+Proof. simpl. reflexivity. Qed.
+
+Definition hd_error {X : Type} (xs : list X) : option X :=
+    match xs with
+    | [] => None
+    | x :: _ => Some x
+    end.
+
+Check @hd_error : forall X, list X -> option X.
+
+Example test_hd_error1 : hd_error [1;2] = Some 1.
+Proof. simpl. reflexivity. Qed.
+Example test_hd_error2 : hd_error [[1];[2]] = Some [1].
+Proof. simpl. reflexivity. Qed.
+
+End OptPlay.

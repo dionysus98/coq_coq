@@ -144,7 +144,7 @@ Theorem rev_length:
 Proof. 
     intros xs.
     induction xs as [ | h t].
-    - reflexivity.
+    - simpl. reflexivity.
     - simpl. rewrite <- IHt. 
     (* Set Printing All. *)
     Abort.
@@ -186,4 +186,4 @@ Fixpoint nth_bad (xs : natlist) (n:nat) : nat :=
 
 Inductive natotion : Type :=
     | Some (n : nat)
-    | None.
+    | None. 
