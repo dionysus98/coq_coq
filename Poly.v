@@ -123,8 +123,8 @@ Theorem app_nil_r:
 Proof.
   intros X l.
   induction l.
-  + simpl. reflexivity.
-  + simpl. rewrite IHl. reflexivity.
+  - simpl. reflexivity.
+  - simpl. rewrite IHl. reflexivity.
   Qed.
 
 Theorem app_assoc: 
@@ -133,8 +133,8 @@ Theorem app_assoc:
 Proof.
   intros A l m n.
   induction l.
-  + simpl. reflexivity.
-  + simpl. rewrite IHl. simpl. reflexivity.
+  - simpl. reflexivity.
+  - simpl. rewrite IHl. simpl. reflexivity.
   Qed.
 
 Lemma app_length:
@@ -143,8 +143,8 @@ Lemma app_length:
 Proof.
   intros X l1 l2.
   induction l1.
-  + simpl. reflexivity.
-  + simpl. rewrite IHl1. simpl. reflexivity.
+  - simpl. reflexivity.
+  - simpl. rewrite IHl1. simpl. reflexivity.
   Qed.
 
 (* Polymorphic Pairs
@@ -232,3 +232,54 @@ Example test_hd_error2 : hd_error [[1];[2]] = Some [1].
 Proof. simpl. reflexivity. Qed.
 
 End OptPlay.
+
+(* Functions as Data 
+    - functions are first-class citizens *)
+
+Definition doit3times {X : Type} (f: X->X) (n:X) : X :=
+    f (f (f n)).
+
+Check @doit3times.
+
+Example test_doit3times: doit3times (fun x => x - 2) 9 = 3.
+Proof. simpl. reflexivity. Qed.
+
+Example test_doit3times': doit3times negb true = false.
+Proof. simpl. reflexivity. Qed.
+
+(* Filter *)
+Fixpoint filter {X:Type} (pred: X->bool) (xs:list X) : list X :=
+    match xs with
+    | nil => nil
+    | x :: xs' =>
+        match pred x with
+        | true => x :: filter pred xs'
+        | false => filter pred xs'
+        end
+    end.
+
+Fixpoint even (x:nat) : bool :=
+    match x with
+    | O => true
+    | S O => false
+    | S (S n') => even n'
+    end.
+
+Example test_filter1: filter even [1;2;3;4] = [2;4].
+Proof. reflexivity. Qed.
+
+Fixpoint map {X Y:Type} (xfn: X->Y) (xs:list X) : list Y :=
+    match xs with
+    | nil => nil
+    | x :: xs' => xfn x :: map xfn xs'
+    end.
+
+Theorem rev_test:
+    forall (X : Type) (x: X) (xs : list X),
+        rev (x :: xs) = (rev xs) ++ [x].
+Proof. 
+    intros X x xs. 
+    induction xs as [ | h t].
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
